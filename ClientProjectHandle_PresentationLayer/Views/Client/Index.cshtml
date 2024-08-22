@@ -1,0 +1,123 @@
+﻿@model ClientProjectHandle_Entities.Client.ClientSubmissionViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>
+    Client Submission Page
+</h3>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ClientFirstName" class="control-label"></label>
+                <input asp-for="ClientFirstName" class="form-control" />
+                <span asp-validation-for="ClientFirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClientLastName" class="control-label"></label>
+                <input asp-for="ClientLastName" class="form-control" />
+                <span asp-validation-for="ClientLastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClientEmail" class="control-label"></label>
+                <input asp-for="ClientEmail" type="email" class="form-control" />
+                <span asp-validation-for="ClientEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClientPhoneNumber" class="control-label"></label>
+                <input asp-for="ClientPhoneNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" />
+                <span asp-validation-for="ClientPhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClientBusinessAddress" class="control-label"></label>
+                <input asp-for="ClientBusinessAddress" class="form-control" />
+                <span asp-validation-for="ClientBusinessAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClientProjectOverview" class="control-label"></label>
+                <textarea asp-for="ClientProjectOverview" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="ClientProjectOverview" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Type of Project</label>
+                <input asp-for="ClientProjectType" class="form-control" style="display:none;" />
+
+                <select class="selectpicker form-control" id="ddlTypeOfProject" multiple data-live-search="true">
+                    @if (ViewBag.TypeOfProjectList != null)
+                    {
+                        if (ViewBag.TypeOfProjectList is List<string>)
+                        {
+                            foreach (string item in ViewBag.TypeOfProjectList as List<string>)
+                            {
+                                <option>@item</option>
+                            }
+                        }
+                    }
+                </select>
+
+                <button type="button" id="btnOtherProjectType" onclick="toggleTextAreaForProjectType();" class="btn btn-primary btn-sm">Other</button>
+                <span asp-validation-for="ClientProjectType" class="text-danger"></span>
+                <div id="divOtherProjectType" class="displayNone" data-isactive="N">
+                    <br />
+                    <textarea class="form-control" id="txtOtherProjectType" ></textarea>
+                </div>
+            </div>
+            <div>
+                &nbsp;
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+                &nbsp;
+                <input type="button" value="add" onclick="AddValueToTypeOfProject()" class="btn btn-primary" />
+            </div>
+        </form>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+    .displayNone{
+        display:none;
+    }
+</style>
+
+<script type="text/javascript">
+
+    $('[class*="selectpicker"]').selectpicker();
+
+    const AddValueToTypeOfProject = () => {
+
+        var csv = "";
+
+        var arrProjectType = $("[id*='ddlTypeOfProject']").val();
+
+        $.each(arrProjectType, (index) => {
+            csv = csv + arrProjectType[index] + (index == arrProjectType.length - 1 ? "" : ",");
+        });
+
+        csv = csv + (csv.length > 0 ? $("#txtOtherProjectType").val().length > 0 ? "," + $("#txtOtherProjectType").val() : "" : $("#txtOtherProjectType").val());
+
+        $("[id*='ClientProjectType']").val(csv);
+    }
+
+    function toggleTextAreaForProjectType(){
+        $("#divOtherProjectType").toggleClass("displayNone");
+        var isActive = $("#divOtherProjectType").attr("data-isactive");
+
+        if (isActive != "Y") {
+            $("#txtOtherProjectType").val("");
+        }
+    }
+
+</script>

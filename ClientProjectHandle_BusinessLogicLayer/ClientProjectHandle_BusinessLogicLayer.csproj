@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClientProjectHandle_DataAccessLayer\ClientProjectHandle_DataAccessLayer.csproj" />
+    <ProjectReference Include="..\ClientProjectHandle_Entities\ClientProjectHandle_Entities.csproj" />
+    <ProjectReference Include="..\ClientProjectHandle_Utilities\ClientProjectHandle_Utilities.csproj" />
+  </ItemGroup>
+
+</Project>

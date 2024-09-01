@@ -13,5 +13,9 @@ namespace ClientProjectHandle_Entities.Global
         public string? ErrorDescription { get; set; }
 
         public int NoOfRowsEffected { get; set; }
+
+        public string? PreviousAction { get; set; }
+
+        public string? PreviousController { get; set; }
     }
 }

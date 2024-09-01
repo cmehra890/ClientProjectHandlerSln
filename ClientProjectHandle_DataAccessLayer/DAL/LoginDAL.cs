@@ -1,14 +1,9 @@
 ﻿using ClientProjectHandle_DataAccessLayer.IDAL;
 using ClientProjectHandle_Entities.LoginAndSignup;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClientProjectHandle_DataAccessLayer.DatabaseConnection;
 using Dapper;
+using ClientProjectHandle_Utilities;
 
 namespace ClientProjectHandle_DataAccessLayer.LoginDAL
 {

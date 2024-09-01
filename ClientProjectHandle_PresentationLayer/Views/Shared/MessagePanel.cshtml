@@ -1,0 +1,27 @@
+﻿@model ClientProjectHandle_Entities.Global.ErrorModel
+
+<div class="card text-center">
+    <div class="card-header">
+        Notification
+    </div>
+    <br />
+    <div class="card-block">
+        @if (Model is not null)
+        {
+            if (Model.ErrorCode == "0")
+            {
+                <h4 class="card-title">
+                    SuccessFul
+                </h4>
+                <p class="card-text">
+                    @Model.ErrorDescription
+                </p>
+            }
+        }
+        <a href="@Url.Action(Model.PreviousAction,Model.PreviousController)" class="btn btn-primary">Go Back</a>
+    </div>
+    <br />
+    <div class="card-footer text-muted">
+        Recently
+    </div>
+</div>

@@ -14,7 +14,7 @@ builder.Services.AddMvc(options =>
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options => 
 { 
-	options.IdleTimeout = TimeSpan.FromMinutes(3);
+	options.IdleTimeout = TimeSpan.FromMinutes(5);
 	options.Cookie.IsEssential = true;
 	options.Cookie.HttpOnly = true;
 });
@@ -22,6 +22,7 @@ builder.Services.AddSession(options =>
 builder.Services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
 builder.Services.AddScoped<ILoginBLL, LoginBLL>();
 builder.Services.AddScoped<IClientBLL, ClientBLL>();
+builder.Services.AddScoped<IAdminBLL, AdminBLL>();
 //builder.Services.AddScoped<>();
 
 var app = builder.Build();
@@ -45,6 +46,6 @@ app.UseSession();
 
 app.MapControllerRoute(
 	name: "default",
-	pattern: "{controller=Login}/{action=Index}/{id?}");
+	pattern: "{controller=Client}/{action=Index}/{id?}");
 
 app.Run();

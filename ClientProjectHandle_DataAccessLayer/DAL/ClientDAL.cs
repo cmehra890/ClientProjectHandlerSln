@@ -1,16 +1,10 @@
-﻿using ClientProjectHandle_DataAccessLayer.DatabaseConnection;
-using ClientProjectHandle_DataAccessLayer.IDAL;
+﻿using ClientProjectHandle_DataAccessLayer.IDAL;
 using ClientProjectHandle_Entities.Client;
 using ClientProjectHandle_Entities.Global;
+using ClientProjectHandle_Utilities;
 using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClientProjectHandle_DataAccessLayer.DAL
 {
@@ -68,7 +62,12 @@ namespace ClientProjectHandle_DataAccessLayer.DAL
                         };
                     }
 
-                    return null;
+                    return new ErrorModel
+                    {
+                        ErrorCode = "0",
+                        ErrorDescription = "Successfullly Submitted!",
+                        NoOfRowsEffected = response
+                    };
                 }
             }
             catch (Exception ex)

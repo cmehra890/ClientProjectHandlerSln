@@ -59,9 +59,11 @@ namespace ClientProjectHandle_Entities.Client
         public string? ClientBusinessAddress { get; set; } = string.Empty;
 
         [Required(ErrorMessage ="Kindly Enter Project Overview!")]
-        [Display(Name ="Overview of Project!")]
+        [Display(Name ="Overview of Project")]
         public string? ClientProjectOverview { get; set; }
 
+        [Required(ErrorMessage = "Kindly Enter Type Of Project")]
+        [Display(Name = "Type of Project")]
         public string? ClientProjectType { get; set; }
     }
     

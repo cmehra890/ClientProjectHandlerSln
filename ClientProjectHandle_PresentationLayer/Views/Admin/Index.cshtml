@@ -1,6 +1,195 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-admin page
+﻿@using ClientProjectHandle_PresentationLayer.Views.TagHelpers
+@model ClientProjectHandle_Entities.Admin.AdminDashboardModel
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Search Page</h1>
+            <form asp-action="Index">
+                <div class="row">
+                    <div class="form-group row">
+                        <label asp-for="ClientName" class="col-sm-2 col-form-label">Client :</label>
+                        <div class="col-sm-4">
+                            <input asp-for="ClientName" class="form-control" placeholder="Enter client name" />
+                        </div>
+                        <label asp-for="ClientTypeOfProject" class="col-sm-2 col-form-label">Type of project :</label>
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(x => x.ClientTypeOfProject, new SelectList(Model.ClientTypeOfProjectList, "Value", "Text"), "-Select-", new { @class = "form-select" })
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid justify-content-center">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+
+            <!-- Assuming you have a list of search results to display -->
+            <div class="mt-4">
+                <h2>Client Project List</h2>
+                <ul class="list-group list-group-light">
+                    <li class="list-group-item d-flex justify-content-between align-items-center border border-info bg-info">
+                        <div>
+                            <div class="fw-bold text-light">Client Name</div>
+                            <div class="text-light">E-Mail Account</div>
+                        </div>
+                        <div>
+                            <div class="fw-bold text-light">Phone No.</div>
+                        </div>
+                        <div>
+                            <div class="fw-bold text-light">Overview of Project</div>
+                        </div>
+                        <div>
+                            <div class="fw-bold text-light">Submission Date</div>
+                        </div>
+                    </li>
+                    @if (Model != null && Model.ProjectSubmissions.Any())
+                    {
+                        foreach (var item in Model.ProjectSubmissions)
+                        {
+                            <li data-submission_id="@item.SubmissionID" role="button" data-toggle="modal" data-target="#projectDetailModel" class="list-group-item d-flex justify-content-between align-items-center list-item">
+                                <div>
+                                    <div class="fw-bold">@item.ClientName</div>
+                                    <div class="text-muted hide-text-overflow">@item.ClientEmail</div>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">@item.ClientPhoneNumber</div>
+                                </div>
+                                <div>
+                                    <div class="fw-bold hide-text-overflow" data-toggle="tooltip" data-placement="top" title="@item.ClientProjectSynopsis">@item.ClientProjectSynopsis</div>
+                                </div>
+                                <div>
+                                    <div class="fw-bold hide-text-overflow">@item.ProjectSubmissionDate.ToString("dd/MM/yyyy HH:mm:ss")</div>
+                                </div>
+                                @*  <div>
+                        @if (item.ClientProjectStatus == "S")
+                        {
+                        <span class="badge rounded-pill badge-success">Submitted</span>
+                        }
+                        else if (item.ClientProjectStatus == "R")
+                        {
+                        <span class="badge rounded-pill badge-warning">Rejected</span>
+                        }
+                        else if (item.ClientProjectStatus == "P")
+                        {
+                        <span class="badge rounded-pill badge-primary">Developing</span>
+                        }
+                        else
+                        {
+                        <span class="badge rounded-pill badge-warning">-</span>
+                        }
+                        </div> *@
+                                
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="list-group-item">No results found.</li>
+                    }
+                </ul>
+            </div>
+
+            <div class="modal fade" id="projectDetailModel">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Project Synopsis</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal Body -->
+                        <div class="modal-body">
+                            <form>
+                                <!-- Client Details Section -->
+                                <div class="card mb-4">
+                                    <div class="card-header fw-bold box-header" data-box_id="CLIENT"> Client Details </div>
+                                    <div class="card-body box-hidden" id="CLIENT_PANEL">
+                                        <div class="mb-3">
+                                            <label for="clientName" class="form-label fw-bold">Name</label>
+                                            <input type="text" class="form-control" id="clientName" name="clientName" readonly>
+                                        </div> <div class="mb-3">
+                                            <label for="contactNumber" class="form-label fw-bold">Contact Number</label>
+                                            <input type="tel" class="form-control" id="contactNumber" name="contactNumber" readonly>
+                                        </div> <div class="mb-3">
+                                            <label for="email" class="form-label fw-bold">Email</label>
+                                            <input type="email" class="form-control" id="email" name="email" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label fw-bold">Address</label>
+                                            <textarea class="form-control" id="address" name="address" rows="3" readonly></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Project Overview Section -->
+                                <div class="card mb-4">
+                                    <div class="card-header fw-bold box-header" data-box_id="PROJECT"> Project Overview </div>
+                                    <div class="card-body box-hidden" id="PROJECT_PANEL">
+                                        <div class="mb-3">
+                                            <label for="typeOfProject" class="form-label fw-bold">Type of Project</label>
+                                            <input type="text" class="form-control" id="projectName" name="typeOfProject" readonly>
+                                        </div> 
+                                        <div class="mb-3">
+                                            <label for="projectDescription" class="form-label fw-bold">Project Description</label>
+                                            <textarea class="form-control" id="projectDescription" name="projectDescription" rows="3" readonly></textarea>
+                                        </div> 
+                                        
+                                    </div>
+                                </div>
+                                @* <div class="text-center"> <button type="submit" class="btn btn-primary">Submit</button> </div> *@
+                            </form>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<style>
+    .hide-text-overflow {
+        display: inline-block;
+        width: 180px;
+        white-space: nowrap;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+    }
+
+    .img-logo {
+        height: 20px;
+        width: 20px;
+    }
+
+    .box-hidden {
+        display: none;
+    }
+</style>
+@* <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".box-header").click(function () {
+            debugger;
+            var box_id = $(this).attr("data-box_id");
+
+            $("#" + box_id + "_PANEL").slideToggle("slow");
+        });
+    });
+    $('#projectDetailModel').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) 
+        var submissionID = button.data('submission_id')
+
+        //alert(submissionID);
+
+        // var modal = $(this)
+        // modal.find('.modal-title').text('New message to ' +)
+        // modal.find('.modal-body input').val(recipient)
+    })
+
+</script>

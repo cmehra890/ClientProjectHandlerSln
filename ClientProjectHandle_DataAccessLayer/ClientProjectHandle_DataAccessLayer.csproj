@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClientProjectHandle_Entities\ClientProjectHandle_Entities.csproj" />
+    <ProjectReference Include="..\ClientProjectHandle_Utilities\ClientProjectHandle_Utilities.csproj" />
   </ItemGroup>
 
 </Project>

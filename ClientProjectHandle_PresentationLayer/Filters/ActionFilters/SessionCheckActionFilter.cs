@@ -9,7 +9,7 @@ namespace ClientProjectHandle_PresentationLayer.Filters.ActionFilters
 
     public class SessionCheckActionFilter : ActionFilterAttribute, IActionFilter
     {
-        public override void OnActionExecuted(ActionExecutedContext context)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (!context.Filters.OfType<SkipSessionCheck>().Any())
             {
@@ -24,7 +24,7 @@ namespace ClientProjectHandle_PresentationLayer.Filters.ActionFilters
                 if (context.Session.GetString("USER_ID") == null)
                 {
                     context.Session.Clear();
-                    context.Response.Redirect("/Login/Index");
+                    context.Response.Redirect("/Client/Index");
                 }
 
             }

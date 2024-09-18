@@ -14,7 +14,7 @@ builder.Services.AddMvc(options =>
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options => 
 { 
-	options.IdleTimeout = TimeSpan.FromMinutes(5);
+	options.IdleTimeout = TimeSpan.FromMinutes(30);
 	options.Cookie.IsEssential = true;
 	options.Cookie.HttpOnly = true;
 });
@@ -43,6 +43,10 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.UseSession();
+
+app.MapGet("/ess",() => {
+	new HttpContextAccessor().HttpContext.Session.Clear();
+});
 
 app.MapControllerRoute(
 	name: "default",

@@ -3,82 +3,105 @@
     ViewData["Title"] = "Index";
 }
 
-
-<h3>
-    Client Submission Page
-</h3>
-
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Index">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ClientFirstName" class="control-label"></label>
-                <input asp-for="ClientFirstName" class="form-control" />
-                <span asp-validation-for="ClientFirstName" class="text-danger"></span>
-            </div>
+<div class="container-fluid px-1 py-5 mx-auto">
+    <div class="row d-flex justify-content-center">
+        <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
+            <h3 class="text-light">Request for support</h3>
+            <p class="blue-text">
+                Just answer a few questions<br> so that we can personalize the right experience for
+                you.
+            </p>
+            <div class="card" style="background-color: rgba(255,255,255,0.8);">
+                <h5 class="text-center mb-4">Providing, what you need...</h5>
+                <form class="form-card" asp-action="Index">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 
-            <div class="form-group">
-                <label asp-for="ClientLastName" class="control-label"></label>
-                <input asp-for="ClientLastName" class="form-control" />
-                <span asp-validation-for="ClientLastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClientEmail" class="control-label"></label>
-                <input asp-for="ClientEmail" type="email" class="form-control" />
-                <span asp-validation-for="ClientEmail" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClientPhoneNumber" class="control-label"></label>
-                <input asp-for="ClientPhoneNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" />
-                <span asp-validation-for="ClientPhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClientBusinessAddress" class="control-label"></label>
-                <input asp-for="ClientBusinessAddress" class="form-control" />
-                <span asp-validation-for="ClientBusinessAddress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClientProjectOverview" class="control-label"></label>
-                <textarea asp-for="ClientProjectOverview" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="ClientProjectOverview" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClientProjectType" class="control-label"></label>
-                <input asp-for="ClientProjectType" class="form-control" style="display:none;" />
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-6 flex-column d-flex">
+                            <label asp-for="ClientFirstName" class="form-control-label px-3"></label>
+                            <input asp-for="ClientFirstName" class="form-control" type="text" placeholder="Enter your first name" />
+                            <span asp-validation-for="ClientFirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6 flex-column d-flex">
+                            <label asp-for="ClientLastName" class="form-control-label px-3"></label>
+                            <input asp-for="ClientLastName" class="form-control" type="text" placeholder="Enter your last name" />
+                            <span asp-validation-for="ClientLastName" class="text-danger"></span>
+                        </div>
+                    </div>
 
-                <select class="selectpicker form-control" id="ddlTypeOfProject" multiple data-live-search="true">
-                    @if (ViewBag.TypeOfProjectList != null)
-                    {
-                        if (ViewBag.TypeOfProjectList is List<string>)
-                        {
-                            foreach (string item in ViewBag.TypeOfProjectList as List<string>)
-                            {
-                                <option>@item</option>
-                            }
-                        }
-                    }
-                </select>
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-6 flex-column d-flex">
+                            <label asp-for="ClientEmail" class="form-control-label px-3"></label>
+                            <input asp-for="ClientEmail" type="email" class="form-control" placeholder="" />
+                            <span asp-validation-for="ClientEmail" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6 flex-column d-flex">
+                            <label asp-for="ClientPhoneNumber" class="form-control-label px-3"></label>
+                            <input asp-for="ClientPhoneNumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" />
+                            <span asp-validation-for="ClientPhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
 
-                <button type="button" id="btnOtherProjectType" onclick="toggleTextAreaForProjectType();" class="btn btn-primary btn-sm">Other</button>
-                <span asp-validation-for="ClientProjectType" class="text-danger"></span>
-                <div id="divOtherProjectType" class="displayNone" data-isactive="N">
-                    <br />
-                    <textarea class="form-control" id="txtOtherProjectType"></textarea>
-                </div>
-                
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-12 flex-column d-flex">
+                            <label asp-for="ClientBusinessAddress" class="form-control-label px-3"></label>
+                            <input asp-for="ClientBusinessAddress" type="text" class="form-control" />
+                            <span asp-validation-for="ClientBusinessAddress" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-12 flex-column d-flex">
+                            <label asp-for="ClientProjectOverview" class="form-control-label px-3"></label>
+                            <textarea asp-for="ClientProjectOverview" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="ClientProjectOverview" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-between text-left">
+                        <div class="form-group col-sm-8 flex-column d-flex">
+                            <label asp-for="ClientProjectType" class="form-control-label px-3"></label>
+                            <input asp-for="ClientProjectType" class="form-control" style="display:none;" />
+                            <select class="selectpicker form-control" id="ddlTypeOfProject" multiple data-live-search="true">
+                                @if (ViewBag.TypeOfProjectList != null)
+                                {
+                                    if (ViewBag.TypeOfProjectList is List<string>)
+                                    {
+                                        foreach (string item in ViewBag.TypeOfProjectList as List<string>)
+                                        {
+                                            <option>@item</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-4 flex-column d-flex">
+                            <label class="form-control-label px-3" style="color:transparent">''<span class="text-danger"></span></label>
+                            <button type="button" id="btnOtherProjectType" onclick="toggleTextAreaForProjectType();" class="btn-block btn-primary">Other</button>
+                            <span asp-validation-for="ClientProjectType" class="text-danger"></span>
+                            
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-between text-left displayNone" id="divOtherProjectType" data-isactive="N">
+                        <div class="form-group col-12 flex-column d-flex">
+                            <div >
+                                <br />
+                                <textarea class="form-control" id="txtOtherProjectType" placeholder="Enter other type of project"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row justify-content-end">
+                        <div class="form-group col-sm-6">
+                            <button type="submit" onclick="return ValidateSubmission();" class="btn-block btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div>
-                &nbsp;
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Submit" onclick="return ValidateSubmission();" class="btn btn-primary" />
-            </div>
-        </form>
-        <div>&nbsp;</div>
-        <div>&nbsp;</div>
+        </div>
     </div>
 </div>
 
@@ -92,6 +115,86 @@
     .displayNone {
         display: none;
     }
+</style>
+<style>
+    body {
+        color: #000;
+        overflow-x: hidden;
+        height: 100%;
+        background-image: url("https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+        background-repeat: no-repeat;
+        background-size: 100% 100%
+    }
+    .card {
+        padding: 30px 40px;
+        margin-top: 60px;
+        margin-bottom: 60px;
+        border: none !important;
+        box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2)
+    }
+
+    .blue-text {
+        color: #00BCD4
+    }
+
+    .form-control-label {
+        margin-bottom: 0
+    }
+
+    input,
+    textarea,
+    button {
+        padding: 8px 15px;
+        border-radius: 5px !important;
+        margin: 5px 0px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        font-size: 18px !important;
+        font-weight: 300
+    }
+
+        input:focus,
+        textarea:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            border: 1px solid #00BCD4;
+            outline-width: 0;
+            font-weight: 400
+        }
+
+    .btn-block {
+        text-transform: uppercase;
+        font-size: 15px !important;
+        font-weight: 400;
+        height: 43px;
+        cursor: pointer
+    }
+
+        .btn-block:hover {
+            color: #fff !important
+        }
+
+    button:focus {
+        -moz-box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+        outline-width: 0
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1; /* Background of the scrollbar track */
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #888; /* Scrollbar color */
+        border-radius: 6px; /* Round the edges of the scrollbar */
+        border: 3px solid #f1f1f1; /* Padding around the scrollbar thumb */
+    }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #555; /* Color when hovering over the scrollbar */
+        }
 </style>
 
 <script type="text/javascript">
@@ -114,7 +217,7 @@
     }
 
     function toggleTextAreaForProjectType() {
-        $("#divOtherProjectType").toggleClass("displayNone");
+        $("#divOtherProjectType").slideToggle("slow");
         var isActive = $("#divOtherProjectType").attr("data-isactive");
 
         if (isActive != "Y") {

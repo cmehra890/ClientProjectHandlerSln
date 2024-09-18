@@ -21,7 +21,7 @@
     @if (HttpContextAccessor?.HttpContext?.Session.GetString("USER_ID") != null)
     {
         <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <nav style="background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%); color: white;" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div class="container-fluid d-flex justify-content-start">
                     @if (HttpContextAccessor?.HttpContext?.Session.GetString("SYSTEM_ROLE") == "CLIENT")
                     {
@@ -35,14 +35,17 @@
 
                                     <ul id="menu">
                                         <a href="@Url.Action("Index","Login")">
-                                        <li>Login</li></a>
+                                        <li style="color:white;">
+                                            Login
+                                        </li>
+                                        </a>
                                     </ul>
                                 </div>
                             </nav>
                         </div>
                     }
                     <div class="d-sm-inline-flex">
-                        <a class="navbar-brand" asp-area="" asp-controller="Client" asp-action="Index">Client Project Synopsis</a>
+                        <a class="navbar-brand text-light" asp-area="" asp-controller="Client" asp-action="Index">Client Project Synopsis</a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                                 aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
@@ -52,13 +55,18 @@
                     {
                         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                             <ul class="navbar-nav flex-grow-1">
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                                </li>
+                                @* <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li> *@
                             </ul>
+                            <div class="d-flex">
+                                <form asp-area="" asp-controller="Login" asp-action="LogOut" method="post">
+                                    <button type="submit" class="btn btn-danger">Logout</button>
+                                </form>
+                            </div>
                         </div>
                     }
                 </div>
@@ -72,9 +80,9 @@
     </div>
 
     @* <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - ClientProjectHandle_PresentationLayer - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <div class="container">
+    &copy; 2024 - ClientProjectHandle_PresentationLayer - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
     </footer> *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -85,5 +93,14 @@
             $('[data-toggle="tooltip"]').tooltip()
         })
     </script>
+    <style>
+        .navbar-h {
+            background-color: #1E2A39;
+            color: white;
+        }
+
+        .navbar-gradient-h {
+        }
+    </style>
 </body>
 </html>

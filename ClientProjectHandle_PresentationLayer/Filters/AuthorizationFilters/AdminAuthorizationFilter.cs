@@ -9,7 +9,8 @@ namespace ClientProjectHandle_PresentationLayer.Filters.AuthorizationFilters
         {
             if(!(context.HttpContext.Session.GetString("SYSTEM_ROLE") == "ADMIN"))
             {
-                context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
+                //context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
+                context.Result = new RedirectToActionResult("Index", "Login", null);
             }
         }
     }

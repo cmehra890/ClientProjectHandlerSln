@@ -1,7 +1,7 @@
 ﻿@using ClientProjectHandle_PresentationLayer.Views.TagHelpers
 @model ClientProjectHandle_Entities.Admin.AdminDashboardModel
 
-<div class="container mt-5">
+@* <div class="container mt-5">
     <div class="row">
         <div class="col-md-12">
             <h1 class="mb-4">Search Page</h1>
@@ -49,7 +49,7 @@
                             <li data-submission_id="@item.SubmissionID" role="button" data-toggle="modal" data-target="#projectDetailModel" class="list-group-item d-flex justify-content-between align-items-center list-item">
                                 <div>
                                     <div class="fw-bold">@item.ClientName</div>
-                                    <div class="text-muted hide-text-overflow">@item.ClientEmail</div>
+                                    <div class="text-muted hide-text-overflow" data-toggle="tooltip" data-placement="top" title="@item.ClientEmail">@item.ClientEmail</div>
                                 </div>
                                 <div>
                                     <div class="fw-bold">@item.ClientPhoneNumber</div>
@@ -58,27 +58,8 @@
                                     <div class="fw-bold hide-text-overflow" data-toggle="tooltip" data-placement="top" title="@item.ClientProjectSynopsis">@item.ClientProjectSynopsis</div>
                                 </div>
                                 <div>
-                                    <div class="fw-bold hide-text-overflow">@item.ProjectSubmissionDate.ToString("dd/MM/yyyy HH:mm:ss")</div>
+                                    <div class="fw-bold hide-text-overflow" data-toggle="tooltip" data-placement="top" title="@item.ProjectSubmissionDate">@item.ProjectSubmissionDate</div>
                                 </div>
-                                @*  <div>
-                        @if (item.ClientProjectStatus == "S")
-                        {
-                        <span class="badge rounded-pill badge-success">Submitted</span>
-                        }
-                        else if (item.ClientProjectStatus == "R")
-                        {
-                        <span class="badge rounded-pill badge-warning">Rejected</span>
-                        }
-                        else if (item.ClientProjectStatus == "P")
-                        {
-                        <span class="badge rounded-pill badge-primary">Developing</span>
-                        }
-                        else
-                        {
-                        <span class="badge rounded-pill badge-warning">-</span>
-                        }
-                        </div> *@
-                                
                             </li>
                         }
                     }
@@ -128,16 +109,52 @@
                                     <div class="card-body box-hidden" id="PROJECT_PANEL">
                                         <div class="mb-3">
                                             <label for="typeOfProject" class="form-label fw-bold">Type of Project</label>
-                                            <input type="text" class="form-control" id="projectName" name="typeOfProject" readonly>
-                                        </div> 
+                                            <input type="text" class="form-control" id="typeOfProject" name="typeOfProject" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="submissionDate" class="form-label fw-bold">Submission Date</label>
+                                            <input type="text" class="form-control" id="submissionDate" name="submissionDate" readonly>
+                                        </div>
                                         <div class="mb-3">
                                             <label for="projectDescription" class="form-label fw-bold">Project Description</label>
                                             <textarea class="form-control" id="projectDescription" name="projectDescription" rows="3" readonly></textarea>
-                                        </div> 
-                                        
+                                        </div>
+
                                     </div>
                                 </div>
-                                @* <div class="text-center"> <button type="submit" class="btn btn-primary">Submit</button> </div> *@
+                                <!-- Comment Section-->
+                                <div class="card mb-4">
+                                    <div class="card-header fw-bold box-header" data-box_id="COMMENT"> Comments </div>
+                                    <div class="card-body box-hidden" id="COMMENT_PANEL">
+                                        <div class="mb-3">
+                                            <div>
+
+                                                <div class="container">
+
+                                                    <div class="row d-flex justify-content-center">
+                                                        <div class="col-md-12 col-lg-12">
+                                                            <h4 class="mb-0">Recent comments</h4>
+                                                            <p class="fw-light mb-4 pb-2">Latest Comments by users</p>
+                                                            <div class="card text-body" id="boxCommentContainer">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <textarea class="form-control" id="txtCommentBox" name="txtCommentBox" rows="3" placeholder="Enter your comment..."></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="text-right">
+                                                <button type="button" id="btnPostComment" data-submission_id="" onclick="PostComment(this);" class="btn btn-secondary"> + Post</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
                             </form>
                         </div>
 
@@ -150,6 +167,142 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+</div> *@
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4 text-light">Search Page</h1>
+            <form asp-action="Index">
+                <div class="row">
+                    <div class="form-group row">
+                        <label asp-for="ClientName" class="col-sm-12 col-md-2 col-form-label fw-bold text-light">Client :</label>
+                        <div class="col-sm-12 col-md-4 mb-3 mb-md-0">
+                            <input asp-for="ClientName" class="form-control" placeholder="Enter client name" />
+                        </div>
+                        <label asp-for="ClientTypeOfProject" class="col-sm-12 col-md-2 col-form-label fw-bold text-light">Type of project :</label>
+                        <div class="col-sm-12 col-md-4">
+                            @Html.DropDownListFor(x => x.ClientTypeOfProject, new SelectList(Model.ClientTypeOfProjectList, "Value", "Text"), "-Select-", new { @class = "form-select" })
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid justify-content-center">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+            <!-- Client Project List -->
+            <div class="mt-4">
+                <h2 class="text-light">Client Project List</h2>
+
+                <ul class="list-group list-group-light">
+                    <!-- List header -->
+                    <li class="list-group-item d-flex flex-wrap justify-content-between align-items-center border border-primary" style="background-color : rgba(0, 123, 255,0.6)">
+                        <div class="fw-bold text-light col-12 col-sm-6 col-md-3">Client Name</div>
+                        <div class="fw-bold text-light col-12 col-sm-6 col-md-3 d-none d-md-block">Phone No.</div>
+                        <div class="fw-bold text-light col-12 col-sm-6 col-md-3 overview-text">Overview of Project</div>
+                        <div class="fw-bold text-light col-12 col-sm-6 col-md-3 d-none d-md-block">Submission Date</div>
+                    </li>
+                </ul>
+                <div style="overflow-y:scroll; max-height:400px;">
+                    <ul class="list-group list-group-light">
+                        <!-- List items -->
+                        @if (Model != null && Model.ProjectSubmissions.Any())
+                        {
+                            foreach (var item in Model.ProjectSubmissions)
+                            {
+                                <li data-submission_id="@item.SubmissionID" role="button" data-toggle="modal" data-target="#projectDetailModel" style="background-color:rgba(255,255,255,0.8)" class="list-group-item d-flex flex-wrap justify-content-between align-items-center">
+                                    <div class="col-12 col-sm-6 col-md-3 fw-bold">@item.ClientName</div>
+                                    <div class="col-12 col-sm-6 col-md-3 fw-bold d-none d-md-block">@item.ClientPhoneNumber</div>
+                                    <div class="col-12 col-sm-6 col-md-3 fw-bold hide-text-overflow overview-text" data-toggle="tooltip" data-placement="top" title="@item.ClientProjectSynopsis">@item.ClientProjectSynopsis</div>
+                                    <div class="col-12 col-sm-6 col-md-3 fw-bold hide-text-overflow d-none d-md-block" data-toggle="tooltip" data-placement="top" title="@item.ProjectSubmissionDate">@item.ProjectSubmissionDate</div>
+
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="list-group-item">No results found.</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <!-- Modal for Project Details -->
+            <div class="modal fade" id="projectDetailModel">
+                <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                    <div class="modal-content" style="background-color: rgba(255, 255, 255,0.7);">
+                        <!-- Modal Header -->
+                        <div class="modal-header" style="background-color : rgba(0, 123, 255,0.7)">
+                            <h4 class="modal-title">Project Synopsis</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- Modal Body -->
+                        <div class="modal-body">
+                            <form>
+                                <!-- Client Details Section -->
+                                <div class="card mb-4">
+                                    <div class="card-header fw-bold box-header" data-box_id="CLIENT"> Client Details </div>
+                                    <div class="card-body box-hidden" id="CLIENT_PANEL">
+                                        <div class="mb-3">
+                                            <label for="clientName" class="form-label fw-bold">Name</label>
+                                            <input type="text" class="form-control" id="clientName" name="clientName" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="contactNumber" class="form-label fw-bold">Contact Number</label>
+                                            <input type="tel" class="form-control" id="contactNumber" name="contactNumber" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label fw-bold">Email</label>
+                                            <input type="email" class="form-control" id="email" name="email" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label fw-bold">Address</label> <textarea class="form-control" id="address" name="address" rows="3" readonly></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Project Overview Section -->
+                                <div class="card mb-4">
+                                    <div class="card-header fw-bold box-header" data-box_id="PROJECT"> Project Overview </div>
+                                    <div class="card-body box-hidden" id="PROJECT_PANEL">
+                                        <div class="mb-3">
+                                            <label for="typeOfProject" class="form-label fw-bold">Type of Project</label>
+                                            <input type="text" class="form-control" id="typeOfProject" name="typeOfProject" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="submissionDate" class="form-label fw-bold">Submission Date</label>
+                                            <input type="text" class="form-control" id="submissionDate" name="submissionDate" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="projectDescription" class="form-label fw-bold">Project Description</label>
+                                            <textarea class="form-control" id="projectDescription" name="projectDescription" rows="3" readonly></textarea>
+                                        </div>
+                                    </div>
+                                </div> <!-- Comment Section --> <div class="card mb-4">
+                                    <div class="card-header fw-bold box-header" data-box_id="COMMENT"> Comments </div> <div class="card-body box-hidden" id="COMMENT_PANEL">
+                                        <div class="mb-3">
+                                            <div class="container">
+                                                <div class="row d-flex justify-content-center">
+                                                    <div class="col-12">
+                                                        <h4 class="mb-0">Recent comments</h4> <p class="fw-light mb-4 pb-2">Latest Comments by users</p>
+                                                        <div class="card text-body" id="boxCommentContainer"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> <div class="mb-3">
+                                            <textarea class="form-control" id="txtCommentBox" name="txtCommentBox" rows="3" placeholder="Enter your comment..."></textarea>
+                                        </div> <div class="mb-3 text-right">
+                                            <button type="button" id="btnPostComment" data-submission_id="" onclick="PostComment(this);" class="btn btn-secondary">+ Post</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Modal Footer -->
+                        <div class="modal-footer"> <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -170,26 +323,216 @@
     .box-hidden {
         display: none;
     }
+
+    @@media (max-width: 768px) {
+        .hide-text-overflow {
+            width: 100%;
+        }
+    }
+
+    .hide-text-overflow {
+        display: inline-block;
+        width: 180px;
+        white-space: nowrap;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+    }
+
+    .img-logo {
+        height: 20px;
+        width: 20px;
+    }
+
+    .box-hidden {
+        display: none;
+    }
+
+    @@media (max-width: 768px) {
+        .overview-text {
+            opacity: 0.5;
+        }
+    }
+
+    body {
+        color: #000;
+        overflow: scroll;
+        height: 100%;
+        background-image: url("https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh; /* Minimum height is the full height of the viewport */
+    }
+    /* Additional styling for different screen sizes */
+
+    @@media (max-width: 768px) {
+        body {
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        body {
+            min-height: 100vh;
+            background-color: #e0e0e0;
+        }
+    }
+    .card-header{
+        background-color: rgba(0, 123, 255,0.7);
+    }
+    .card{
+        background-color: rgba(255, 255, 255,0.6);
+    }
+    .card-body{
+        background-color: rgba(255, 255, 255,0.1);
+    }
+    /* For Chrome, Safari, and Edge */ ::-webkit-scrollbar {
+        width: 8px; /* Width of the entire scrollbar */
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1; /* Background of the scrollbar track */
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #888; /* Scrollbar color */
+        border-radius: 6px; /* Round the edges of the scrollbar */
+        border: 3px solid #f1f1f1; /* Padding around the scrollbar thumb */
+    }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #555; /* Color when hovering over the scrollbar */
+        }
+
+    .form-control[readonly] {
+        background-color: white;
+        opacity: 1;
+    }
 </style>
 @* <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> *@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script type="text/javascript">
     $(document).ready(function () {
         $(".box-header").click(function () {
-            debugger;
             var box_id = $(this).attr("data-box_id");
 
             $("#" + box_id + "_PANEL").slideToggle("slow");
         });
     });
     $('#projectDetailModel').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
-        var submissionID = button.data('submission_id')
+        var button = $(event.relatedTarget)
+        var submissionID = button.data('submission_id');
 
-        //alert(submissionID);
+        $.ajax({
+            url: "@Url.Action("GetProjectDetails", "Admin")",
+            method: "POST",
+            data: { submissionId: submissionID.toString() },
+            contentType: "application/x-www-form-urlencoded",
+            success: (response) => {
+
+                $("#clientName").val(response.clientName);
+                $("#contactNumber").val(response.clientPhoneNumber);
+                $("#email").val(response.clientEmail);
+                $("#address").val(response.clientBusinessAddress);
+                $("#typeOfProject").val(response.clientProjectType);
+                $("#submissionDate").val(response.projectSubmissionDate);
+                $("#projectDescription").val(response.clientProjectSynopsis);
+
+                var commentBox = $("#boxCommentContainer");
+
+                $(commentBox).empty();
+
+                if (response.projectComments.length != 0) {
+                    for (let i = 0; i < response.projectComments.length; i++) {
+
+                        let template = commentTemplate.replace("#COMMENTER_NAME#", response.projectComments[i].commentedBy)
+                            .replace("#COMMENT_DATE#", response.projectComments[i].commentDate)
+                            .replace("#COMMENT_TEXT#", response.projectComments[i].commentText)
+
+                        $(commentBox).append(template);
+                    }
+                }
+                else {
+                    $(commentBox).append('<div class="card-body p-4"><div class="d-flex flex-start justify-contetn-center" style="text-align: center;flex-direction: column; ">No comments yet...</div></div>');
+                }
+
+                $("#btnPostComment").attr('data-submission_id', submissionID);
+            },
+            failure: (response) => {
+                console.log(response);
+            }
+        });
 
         // var modal = $(this)
         // modal.find('.modal-title').text('New message to ' +)
         // modal.find('.modal-body input').val(recipient)
-    })
+    });
+
+    var commentTemplate = `<div class="card-body p-4"><div class="d-flex flex-start"><div><h6 class="fw-bold mb-1">
+                                                                                                        #COMMENTER_NAME#</h6><div class="d-flex align-items-center mb-3"><p class="mb-0">#COMMENT_DATE#</p></div>
+                                                                                                        <p class="mb-0">#COMMENT_TEXT#</p></div></div></div><hr class="my-0" style="height: 1px;" />`;
+
+    function PostComment(element) {
+        if ($("#txtCommentBox").val().trim() == "") {
+            $("#txtCommentBox").focus();
+            return;
+        }
+
+        var submissionID = $(element).attr('data-submission_id');
+        var commentText = $("#txtCommentBox").val().toString().trim();
+
+        $("#txtCommentBox").val('');
+
+        $.ajax({
+            url: "@Url.Action("PostCommentOnProject", "Admin")",
+            method: "POST",
+            data: { submissionId: submissionID.toString(), comment: commentText },
+            contentType: "application/x-www-form-urlencoded",
+            async: false,
+            success: (response) => {
+                console.log(response);
+
+            },
+            failure: (response) => {
+                console.log(response);
+            }
+        });
+
+        $.ajax({
+            url: "@Url.Action("GetProjectDetails", "Admin")",
+            method: "POST",
+            data: { submissionId: submissionID.toString() },
+            contentType: "application/x-www-form-urlencoded",
+            success: (response) => {
+
+                var commentBox = $("#boxCommentContainer");
+
+                $(commentBox).empty();
+
+                if (response.projectComments.length != 0) {
+                    for (let i = 0; i < response.projectComments.length; i++) {
+
+                        let template = commentTemplate.replace("#COMMENTER_NAME#", response.projectComments[i].commentedBy)
+                            .replace("#COMMENT_DATE#", response.projectComments[i].commentDate)
+                            .replace("#COMMENT_TEXT#", response.projectComments[i].commentText)
+
+                        $(commentBox).append(template);
+                    }
+                }
+                else {
+                    $(commentBox).append('<div class="card-body p-4"><div class="d-flex flex-start justify-contetn-center" style="text-align: center;flex-direction: column; ">No comments yet...</div></div>');
+                }
+            },
+            failure: (response) => {
+                console.log(response);
+            }
+        });
+    }
+
 
 </script>
